@@ -1,24 +1,45 @@
-interface Notification {
-    void notifyUser();
+interface Logger {
+    void log(String message);
 }
-class EmailNotification implements Notification {
-    public void notifyUser() { System.out.println("Sending Email Notification"); }
-}
-class SMSNotification implements Notification {
-    public void notifyUser() { System.out.println("Sending SMS Notification"); }
-}
-class NotificationFactory {
-    public static Notification createNotification(String type) {
-        if (type.equalsIgnoreCase("EMAIL")) return new EmailNotification();
-        else if (type.equalsIgnoreCase("SMS")) return new SMSNotification();
-        else throw new IllegalArgumentException("Unknown type");
+class ConsoleLogger implements Logger {
+    public void log(String message) {
+        System.out.println("LOG: " + message);
     }
 }
-class FactoryDemo {
+class FileLogger implements Logger {
+    public void log(String message) {
+        System.out.println("FILE LOG: " + message);
+    }
+}
+abstract class LoggerCreator {
+    public abstract Logger createLogger();
+    public void log(String message) {
+        Logger logger = createLogger(); 
+        logger.log(message);            
+    }
+}
+class ConsoleLoggerCreator extends LoggerCreator {
+    @Override
+    public Logger createLogger() {
+        return new ConsoleLogger();
+    }
+}
+class FileLoggerCreator extends LoggerCreator {
+    @Override
+    public Logger createLogger() {
+        return new FileLogger();
+    }
+}
+class FactoryMethodDemo {
     public static void main(String[] args) {
-        Notification n1 = NotificationFactory.createNotification("EMAIL");
-        n1.notifyUser();
-        Notification n2 = NotificationFactory.createNotification("SMS");
-        n2.notifyUser();
+        LoggerCreator creator = new ConsoleLoggerCreator();
+        Logger logger1 = creator.createLogger();
+        Logger logger2 = creator.createLogger();
+        logger1.log("Application started");
+        logger2.log("User logged in");
+        System.out.println("Are both loggers same? " + (logger1 == logger2));
+        creator = new FileLoggerCreator();
+        Logger fileLogger = creator.createLogger();
+        fileLogger.log("Saving to file");
     }
 }
