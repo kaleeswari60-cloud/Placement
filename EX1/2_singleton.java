@@ -1,8 +1,8 @@
-class Logger {
-    private static Logger instance;
-    private Logger() {} 
-    public static Logger getInstance() {
-        if (instance == null) instance = new Logger();
+class MyLogger {
+    private static MyLogger instance;
+    private MyLogger() {}
+    public static MyLogger getInstance() {
+        if (instance == null) instance = new MyLogger();
         return instance;
     }
     public void log(String message) {
@@ -11,8 +11,8 @@ class Logger {
 }
 class SingletonDemo {
     public static void main(String[] args) {
-        Logger logger1 = Logger.getInstance();
-        Logger logger2 = Logger.getInstance();
+        MyLogger logger1 = MyLogger.getInstance();
+        MyLogger logger2 = MyLogger.getInstance();
         logger1.log("Application started");
         logger2.log("User logged in");
         System.out.println("Are both loggers same? " + (logger1 == logger2));
